@@ -1,6 +1,26 @@
 import 'species.dart';
 import 'decks.dart';
 
+List<Species> players() {
+  List<Species> players = [
+    playerOne,
+    playerTwo,
+    playerThree,
+    playerFour,
+    playerFive,
+    playerSix,
+    playerSeven,
+    playerEight
+  ];
+  return players;
+}
+
+List<Species> opponents(Species player) {
+  List<Species> opponents = players();
+  opponents.remove(player);
+  return opponents;
+}
+
 Species playerOne = Species(
   homoSapiens.elementAt(0),
   homoSapiens.elementAt(1),

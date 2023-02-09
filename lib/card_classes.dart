@@ -90,3 +90,69 @@ class _AdaptationCardState extends State<AdaptationCard> {
     );
   }
 }
+
+class AttackCard extends StatefulWidget {
+  final String imgPath;
+  final ValueNotifier<int> valueNotifier;
+  final ValueNotifier<bool> canPlay;
+  final int cardnum;
+  const AttackCard({
+    super.key,
+    required this.imgPath,
+    required this.valueNotifier,
+    required this.canPlay,
+    required this.cardnum,
+  });
+
+  @override
+  State<AttackCard> createState() => _AttackCardState();
+}
+
+class _AttackCardState extends State<AttackCard> {
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: widget.valueNotifier,
+      builder: (context, value, child) {
+        return GestureDetector(
+          child: InkWell(
+            splashColor: Colors.greenAccent,
+            onTap: () {
+              widget.valueNotifier.value = widget.cardnum;
+              canPlay.value = cardCosts[intToCardName[(widget.valueNotifier.value)]]! <= playerOne.energyToSpend;
+            },
+            onDoubleTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CardZoomed(
+                    imgPath: widget.imgPath,
+                  ),
+                ),
+              );
+            },
+            child: Card(
+              color: widget.cardnum == widget.valueNotifier.value
+                  ? (canPlay.value ? Colors.green : Colors.lightGreen)
+                  : Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: SizedBox(
+                width: 180,
+                height: 300,
+                child: Column(
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage(widget.imgPath),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }, // builder
+    );
+  }
+}
