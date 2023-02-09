@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 ValueNotifier<int> selected = ValueNotifier(999);
 ValueNotifier<bool> canPlay = ValueNotifier(false);
-final List<int> cardNumList = returnCardNumList();
+List<int> cardNumList = returnCardNumList();
+List<int> discardNumList = [];
 
 Map<int, String> intToCardName = {
   0: 'Long_Legs-01',
@@ -56,12 +57,16 @@ List<int> returnCardNumList() {
 }
 
 List<int> drawCardNums(int numCards) {
+  if (cardNumList.length < numCards) {
+    discardNumList.shuffle();
+    cardNumList.addAll(discardNumList);
+    discardNumList = [];
+  }
   List<int> drawn = [];
   for (var i = 0; i < numCards; i++) {
     drawn.add(cardNumList.first);
     cardNumList.remove(cardNumList.first);
   }
-  print('Card Numbers List: $cardNumList');
-  print('Drawn Cards: $drawn');
+  drawn.sort();
   return drawn;
 }

@@ -27,6 +27,7 @@ class Species {
 
   void drawCards() {
     hand.addAll(drawCardNums(reproduction));
+    hand.sort();
   }
 
   void increaseReproduction(int x) => reproduction = reproduction + x;
