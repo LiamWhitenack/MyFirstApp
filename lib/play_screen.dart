@@ -1,12 +1,12 @@
-// import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:myfirstapp/players.dart';
 import 'species.dart';
 import 'card_classes.dart';
 import 'decks.dart';
 
 class PlayScreen extends StatefulWidget {
   final Species player;
-  late List<int> cardNumList;
+  final List<Species> playerList = players();
   PlayScreen({required this.player, super.key});
   @override
   State<PlayScreen> createState() => _PlayScreenState();
@@ -63,7 +63,7 @@ class _PlayScreenState extends State<PlayScreen> {
                                     widget.player,
                                   );
                                   widget.player.hand.remove(selected.value);
-                                  widget.player.drawCards();
+                                  discardNumList.add(selected.value);
                                   selected.value = 999;
                                 },
                               );
