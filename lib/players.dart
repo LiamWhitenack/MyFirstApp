@@ -6,12 +6,13 @@ List<Species> players() {
     playerOne,
     playerTwo,
     playerThree,
-    playerFour,
-    playerFive,
-    playerSix,
-    playerSeven,
-    playerEight
+    // playerFour,
+    // playerFive,
+    // playerSix,
+    // playerSeven,
+    // playerEight
   ];
+  // print(players);
   return players;
 }
 
@@ -32,6 +33,7 @@ Species playerOne = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerTwo = Species(
   homoSapiens.elementAt(0),
@@ -44,6 +46,7 @@ Species playerTwo = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerThree = Species(
   homoSapiens.elementAt(0),
@@ -56,6 +59,7 @@ Species playerThree = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerFour = Species(
   homoSapiens.elementAt(0),
@@ -68,6 +72,7 @@ Species playerFour = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerFive = Species(
   homoSapiens.elementAt(0),
@@ -80,6 +85,7 @@ Species playerFive = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerSix = Species(
   homoSapiens.elementAt(0),
@@ -92,6 +98,7 @@ Species playerSix = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerSeven = Species(
   homoSapiens.elementAt(0),
@@ -104,6 +111,7 @@ Species playerSeven = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );
 Species playerEight = Species(
   homoSapiens.elementAt(0),
@@ -116,4 +124,5 @@ Species playerEight = Species(
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
   drawCardNums(homoSapiens.elementAt(0)),
+  [],
 );

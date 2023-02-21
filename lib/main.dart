@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'play_screen.dart';
-import 'loading.dart';
+import 'species.dart';
 import 'players.dart';
+import 'card_classes.dart';
 
 void main() {
   runApp(
-    MaterialApp(
+    const MaterialApp(
       title: 'Survival of the Fittest',
-      initialRoute: '/home',
-      routes: {
-        '/': (context) => const LoadingScreen(),
-        '/home': (context) => const HomePage(),
-        '/playerone': (context) => PlayScreen(player: playerOne),
-        '/playertwo': (context) => PlayScreen(player: playerTwo),
-      },
+      home: HomePage(),
     ),
   );
 }
@@ -50,7 +45,8 @@ class HomePage extends StatelessWidget {
                 overlayColor: MaterialStateProperty.all<Color>(Colors.lightGreen),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/playerone');
+                setupGame();
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => GameScreen()));
               },
               child: const Text(
                 'Play',

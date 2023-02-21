@@ -1,4 +1,5 @@
 import 'package:myfirstapp/decks.dart';
+import 'package:myfirstapp/players.dart';
 
 class Species {
   int reproduction;
@@ -7,10 +8,11 @@ class Species {
   int energy;
   int aggression;
   int habitat;
-  int diet;
+  String diet;
   int population;
   int energyToSpend;
   List<int> hand;
+  List<Species> opponents;
 
   Species(
     this.reproduction,
@@ -23,6 +25,7 @@ class Species {
     this.population,
     this.energyToSpend,
     this.hand,
+    this.opponents,
   );
 
   void drawCards() {
@@ -36,7 +39,8 @@ class Species {
   void increaseEnergy(int x) => energy = energy + x;
   void increaseAggression(int x) => aggression = aggression + x;
   void increaseHabitat(int x) => habitat = habitat + x;
-  void increaseDiet(int x) => diet = diet + x;
+  void changeDiet(String x) => diet = x;
+  void increasePopulation(int x) => population = population + x;
   void increaseEnergyToSpend(int x) => energyToSpend = energyToSpend + x;
 }
 
@@ -47,7 +51,7 @@ List homoSapiens = [
   5, // energy
   5, // aggression
   5, // habitat
-  5, // diet
+  'herbivore', // diet
   5, // population
   5, // energyToSpend
 ];

@@ -1,17 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'players.dart';
 import 'species.dart';
 import 'play_screen.dart';
 import 'decks.dart';
-
-void playCard(int cardnum, Species player) {
-  if (cardnum == 0) {
-    playLongLegs(player);
-  }
-  if (cardnum == 1) {
-    playSharpTeeth(player);
-  }
-}
+import 'attack_cards.dart';
 
 void playLongLegs(Species player) {
   player.increaseAggression(1);
@@ -25,12 +19,12 @@ void playSharpTeeth(Species player) {
   player.increaseEnergyToSpend(-1);
 }
 
-class AdaptationCard extends StatefulWidget {
+class EvolutionCard extends StatefulWidget {
   final String imgPath;
   final ValueNotifier<int> valueNotifier;
   final ValueNotifier<bool> canPlay;
   final int cardnum;
-  const AdaptationCard({
+  const EvolutionCard({
     super.key,
     required this.imgPath,
     required this.valueNotifier,
@@ -39,120 +33,60 @@ class AdaptationCard extends StatefulWidget {
   });
 
   @override
-  State<AdaptationCard> createState() => _AdaptationCardState();
+  State<EvolutionCard> createState() => _EvolutionCardState();
 }
 
-class _AdaptationCardState extends State<AdaptationCard> {
+class _EvolutionCardState extends State<EvolutionCard> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<int>(
-      valueListenable: widget.valueNotifier,
-      builder: (context, value, child) {
-        return GestureDetector(
-          child: InkWell(
-            splashColor: Colors.greenAccent,
-            onTap: () {
-              widget.valueNotifier.value = widget.cardnum;
-              canPlay.value = cardCosts[intToCardName[(widget.valueNotifier.value)]]! <= playerOne.energyToSpend;
-            },
-            onDoubleTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CardZoomed(
-                    imgPath: widget.imgPath,
-                  ),
-                ),
-              );
-            },
+        valueListenable: widget.valueNotifier,
+        builder: (context, value, child) {
+          return GestureDetector(
             child: Card(
+              clipBehavior: Clip.antiAlias,
               color: widget.cardnum == widget.valueNotifier.value
                   ? (canPlay.value ? Colors.green : Colors.lightGreen)
                   : Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(15.0),
               ),
-              child: SizedBox(
-                width: 180,
-                height: 300,
-                child: Column(
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage(widget.imgPath),
+              child: InkWell(
+                splashColor: Colors.greenAccent,
+                onTap: () {
+                  widget.valueNotifier.value = widget.cardnum;
+                  bool temp = true;
+                  if (cardTypes[intToCardName[widget.valueNotifier.value]] == 'attack') {
+                    temp = predatorConditions[intToCardName[widget.valueNotifier.value]]
+                        ?.call(playerOne); // check to make sure that it can be played if it's an attack card
+                  }
+                  canPlay.value =
+                      (cardCosts[intToCardName[(widget.valueNotifier.value)]]! <= playerOne.energyToSpend) & temp;
+                },
+                onDoubleTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CardZoomed(
+                        imgPath: widget.imgPath,
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }, // builder
-    );
-  }
-}
-
-class AttackCard extends StatefulWidget {
-  final String imgPath;
-  final ValueNotifier<int> valueNotifier;
-  final ValueNotifier<bool> canPlay;
-  final int cardnum;
-  const AttackCard({
-    super.key,
-    required this.imgPath,
-    required this.valueNotifier,
-    required this.canPlay,
-    required this.cardnum,
-  });
-
-  @override
-  State<AttackCard> createState() => _AttackCardState();
-}
-
-class _AttackCardState extends State<AttackCard> {
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<int>(
-      valueListenable: widget.valueNotifier,
-      builder: (context, value, child) {
-        return GestureDetector(
-          child: InkWell(
-            splashColor: Colors.greenAccent,
-            onTap: () {
-              widget.valueNotifier.value = widget.cardnum;
-              canPlay.value = cardCosts[intToCardName[(widget.valueNotifier.value)]]! <= playerOne.energyToSpend;
-            },
-            onDoubleTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CardZoomed(
-                    imgPath: widget.imgPath,
+                  );
+                },
+                child: SizedBox(
+                  width: 180,
+                  height: 300,
+                  child: Column(
+                    children: <Widget>[
+                      Image(
+                        image: AssetImage(widget.imgPath),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-            child: Card(
-              color: widget.cardnum == widget.valueNotifier.value
-                  ? (canPlay.value ? Colors.green : Colors.lightGreen)
-                  : Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: SizedBox(
-                width: 180,
-                height: 300,
-                child: Column(
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage(widget.imgPath),
-                    ),
-                  ],
-                ),
               ),
             ),
-          ),
-        );
-      }, // builder
-    );
+          );
+        });
   }
 }
