@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'ViewOpponentScreen.dart';
+import 'package:myfirstapp/loading.dart';
 import 'package:myfirstapp/players.dart';
 import 'species.dart';
 import 'attack_cards.dart';
@@ -14,7 +16,6 @@ void setupGame() {
     playerTwo,
     playerThree,
   ];
-  playerOne.hand.add(6);
 }
 
 class GameScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   List<Widget> screenIndex = [
     const PlayScreen(),
+    const LoadingScreen(),
+    ViewOpponentScreen(player: playerOne),
   ];
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
@@ -82,9 +85,8 @@ class _PlayScreenState extends State<PlayScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OpponentScreen(
+        builder: (context) => ChooseOpponentScreen(
           player: playerOne,
-          chooseAPlayer: true,
         ),
       ),
     );
@@ -139,8 +141,6 @@ class _PlayScreenState extends State<PlayScreen> {
                             selected.value = 999;
                           },
                         );
-                        print('playerTwo population: ${playerTwo.population}');
-                        print('playerThree population: ${playerThree.population}');
                       },
                       child: const Text(
                         'Play',

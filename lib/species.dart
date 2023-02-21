@@ -51,7 +51,7 @@ List homoSapiens = [
   5, // energy
   5, // aggression
   5, // habitat
-  'herbivore', // diet
+  'carnivore', // diet
   5, // population
   5, // energyToSpend
 ];

@@ -60,26 +60,20 @@ Map<String, Function> predatorConditions = {'Attack_the_Nest-01': predatorAttack
 
 Map<String, Function> preyConditions = {'Attack_the_Nest-01': alwaysTrue};
 
-class OpponentScreen extends StatelessWidget {
+class ChooseOpponentScreen extends StatelessWidget {
   final Species player;
-  final bool chooseAPlayer;
   final ValueNotifier<int> selected = ValueNotifier(999);
 
-  OpponentScreen({required this.player, required this.chooseAPlayer, super.key});
+  ChooseOpponentScreen({required this.player, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: !chooseAPlayer
-          ? AppBar(
-              backgroundColor: const Color.fromARGB(255, 38, 162, 42),
-              title: const Text('Survival of the Fittest'),
-            )
-          : AppBar(
-              backgroundColor: const Color.fromARGB(255, 38, 162, 42),
-              title: const Text('Survival of the Fittest'),
-              automaticallyImplyLeading: false,
-            ),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 38, 162, 42),
+        title: const Text('Survival of the Fittest'),
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
         child: ValueListenableBuilder<int>(
           valueListenable: selected,
@@ -89,16 +83,14 @@ class OpponentScreen extends StatelessWidget {
                 Column(
                   children: opponentCards(player, selected),
                 ),
-                chooseAPlayer
-                    ? TextButton(
-                        onPressed: () {
-                          prey = opponents(player).elementAt(selected.value);
-                          Navigator.pop(context);
-                          nextButtonCompleter?.complete();
-                          nextButtonCompleter = null;
-                        },
-                        child: const Text('Choose'))
-                    : Container(),
+                TextButton(
+                    onPressed: () {
+                      prey = opponents(player).elementAt(selected.value);
+                      Navigator.pop(context);
+                      nextButtonCompleter?.complete();
+                      nextButtonCompleter = null;
+                    },
+                    child: const Text('Choose'))
               ],
             );
           },
