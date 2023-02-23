@@ -6,12 +6,13 @@ import 'package:myfirstapp/loading.dart';
 import 'package:myfirstapp/players.dart';
 import 'species.dart';
 import 'attack_cards.dart';
-import 'players.dart';
-import 'card_classes.dart';
+import 'mutation_screen.dart';
+// import 'players.dart';
+// import 'card_classes.dart';
 import 'decks.dart';
 
 void setupGame() {
-  List<Species> PlayerList = [
+  List<Species> playerList = [
     playerOne,
     playerTwo,
     playerThree,
@@ -21,7 +22,7 @@ void setupGame() {
 class GameScreen extends StatefulWidget {
   // final Species player;
   // final List<Species> playerList = players();
-  GameScreen({super.key});
+  const GameScreen({super.key});
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -29,7 +30,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   List<Widget> screenIndex = [
     const PlayScreen(),
-    const LoadingScreen(),
+    const MutationScreen(),
     ViewOpponentScreen(player: playerOne),
   ];
   int _selectedIndex = 0;
@@ -81,11 +82,12 @@ class PlayScreen extends StatefulWidget {
 Completer<void>? nextButtonCompleter;
 
 class _PlayScreenState extends State<PlayScreen> {
-  Future<void> choosePrey() async {
+  Future<void> choosePrey(int cardNum) async {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChooseOpponentScreen(
+          cardNum: cardNum,
           player: playerOne,
         ),
       ),
@@ -130,7 +132,7 @@ class _PlayScreenState extends State<PlayScreen> {
                         if ((selected.value == 999) | !canPlay.value) return;
                         if (cardTypes[intToCardName[selected.value]] == 'attack') {
                           if (!predatorConditions[intToCardName[selected.value]]?.call(playerOne)) return;
-                          await choosePrey();
+                          await choosePrey(selected.value);
                           if (!preyConditions[intToCardName[selected.value]]?.call(prey)) return;
                         }
                         setState(

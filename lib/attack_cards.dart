@@ -11,20 +11,25 @@ Species activePlayer = playerOne;
 bool pause = false;
 Species prey = playerOne;
 
-List<Widget> opponentCards(Species predator, ValueNotifier listener) {
+List<Widget> opponentCards(Species predator, ValueNotifier listener,
+    {Function preyConditions = alwaysTrue, bool attackCard = false}) {
   List<Species> opponentList = opponents(predator);
   List<Widget> output = [];
   List<int> cardNums = [];
+  List<bool> viableTargetList = [];
   for (var i = 0; i < opponentList.length; i++) {
+    viableTargetList.add(preyConditions.call(opponentList.elementAt(i)));
     output.add(
       Card(
         child: InkWell(
           onTap: () {
-            listener.value = i;
+            if (viableTargetList.elementAt(i)) listener.value = i;
           },
           child: Container(
             height: 112,
-            color: listener.value == i ? Colors.blue : Colors.grey,
+            color: viableTargetList.elementAt(i)
+                ? (listener.value == i ? (attackCard ? Colors.blue : Colors.white) : Colors.white)
+                : Colors.grey,
             child: Column(children: [
               Text('Reproduction: ${opponentList.elementAt(i).reproduction}'),
               Text('Strength: ${opponentList.elementAt(i).strength}'),
@@ -52,19 +57,24 @@ bool predatorAttackTheNest(Species player) {
   return (player.diet == 'carnivore') | (player.diet == 'omnivore');
 }
 
+bool preyAttackTheNest(Species prey) {
+  return (prey.reproduction > 0);
+}
+
 bool alwaysTrue(Species player) {
   return true;
 }
 
 Map<String, Function> predatorConditions = {'Attack_the_Nest-01': predatorAttackTheNest};
 
-Map<String, Function> preyConditions = {'Attack_the_Nest-01': alwaysTrue};
+Map<String, Function> preyConditions = {'Attack_the_Nest-01': preyAttackTheNest};
 
 class ChooseOpponentScreen extends StatelessWidget {
   final Species player;
+  final int cardNum;
   final ValueNotifier<int> selected = ValueNotifier(999);
 
-  ChooseOpponentScreen({required this.player, super.key});
+  ChooseOpponentScreen({required this.cardNum, required this.player, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +91,8 @@ class ChooseOpponentScreen extends StatelessWidget {
             return Column(
               children: [
                 Column(
-                  children: opponentCards(player, selected),
+                  children: opponentCards(player, selected,
+                      preyConditions: preyConditions[intToCardName[cardNum]]!, attackCard: true),
                 ),
                 TextButton(
                     onPressed: () {

@@ -36,7 +36,7 @@ Species playerOne = Species(
   [],
 );
 Species playerTwo = Species(
-  homoSapiens.elementAt(0),
+  homoSapiens.elementAt(0) - 5,
   homoSapiens.elementAt(1),
   homoSapiens.elementAt(2),
   homoSapiens.elementAt(3),

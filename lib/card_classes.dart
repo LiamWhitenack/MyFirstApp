@@ -23,13 +23,13 @@ class EvolutionCard extends StatefulWidget {
   final String imgPath;
   final ValueNotifier<int> valueNotifier;
   final ValueNotifier<bool> canPlay;
-  final int cardnum;
+  final int cardNum;
   const EvolutionCard({
     super.key,
     required this.imgPath,
     required this.valueNotifier,
     required this.canPlay,
-    required this.cardnum,
+    required this.cardNum,
   });
 
   @override
@@ -45,7 +45,7 @@ class _EvolutionCardState extends State<EvolutionCard> {
           return GestureDetector(
             child: Card(
               clipBehavior: Clip.antiAlias,
-              color: widget.cardnum == widget.valueNotifier.value
+              color: widget.cardNum == widget.valueNotifier.value
                   ? (canPlay.value ? Colors.green : Colors.lightGreen)
                   : Colors.white,
               shape: RoundedRectangleBorder(
@@ -54,7 +54,7 @@ class _EvolutionCardState extends State<EvolutionCard> {
               child: InkWell(
                 splashColor: Colors.greenAccent,
                 onTap: () {
-                  widget.valueNotifier.value = widget.cardnum;
+                  widget.valueNotifier.value = widget.cardNum;
                   bool temp = true;
                   if (cardTypes[intToCardName[widget.valueNotifier.value]] == 'attack') {
                     temp = predatorConditions[intToCardName[widget.valueNotifier.value]]

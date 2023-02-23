@@ -25,14 +25,6 @@ class ViewOpponentScreen extends StatelessWidget {
                 Column(
                   children: opponentCards(player, selected),
                 ),
-                TextButton(
-                    onPressed: () {
-                      prey = opponents(player).elementAt(selected.value);
-                      Navigator.pop(context);
-                      nextButtonCompleter?.complete();
-                      nextButtonCompleter = null;
-                    },
-                    child: const Text('Choose'))
               ],
             );
           },

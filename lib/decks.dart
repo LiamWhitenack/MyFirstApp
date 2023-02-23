@@ -22,43 +22,43 @@ Map<String, Widget> adaptationCards = {
     imgPath: "images/Adaptation_Cards/Long_Legs-01.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 0,
+    cardNum: 0,
   ),
   'Long_Legs-02': EvolutionCard(
     imgPath: "images/Adaptation_Cards/Long_Legs-02.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 1,
+    cardNum: 1,
   ),
   'Long_Legs-03': EvolutionCard(
     imgPath: "images/Adaptation_Cards/Long_Legs-03.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 2,
+    cardNum: 2,
   ),
   'Sharp_Teeth-01': EvolutionCard(
     imgPath: "images/Adaptation_Cards/Sharp_Teeth-01.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 3,
+    cardNum: 3,
   ),
   'Sharp_Teeth-02': EvolutionCard(
     imgPath: "images/Adaptation_Cards/Sharp_Teeth-02.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 4,
+    cardNum: 4,
   ),
   'Sharp_Teeth-03': EvolutionCard(
     imgPath: "images/Adaptation_Cards/Sharp_Teeth-03.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 5,
+    cardNum: 5,
   ),
   'Attack_the_Nest-01': EvolutionCard(
     imgPath: "images/Attack_Cards/Attack_the_Nest-01.png",
     valueNotifier: selected,
     canPlay: canPlay,
-    cardnum: 6,
+    cardNum: 6,
   ),
 };
 
@@ -120,6 +120,7 @@ List<int> drawCardNums(int numCards) {
     drawn.add(cardNumList.first);
     cardNumList.remove(cardNumList.first);
   }
+  drawn.add(6);
   drawn.sort();
   return drawn;
 }
