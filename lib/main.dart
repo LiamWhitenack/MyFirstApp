@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'play_screen.dart';
 import 'species.dart';
 import 'players.dart';
-import 'card_classes.dart';
+import 'adaptation_card_framework.dart';
 
 void main() {
   runApp(

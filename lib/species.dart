@@ -1,6 +1,5 @@
-import 'package:myfirstapp/card_classes.dart';
-import 'package:myfirstapp/decks.dart';
-import 'package:myfirstapp/players.dart';
+import 'package:myfirstapp/adaptation_card_framework.dart';
+import 'attack_card_framework.dart';
 
 class Species {
   int reproduction;

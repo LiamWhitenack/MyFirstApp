@@ -1,109 +1,34 @@
-import 'dart:async';
-import 'package:myfirstapp/card_classes.dart';
-
-import 'mutation_cards.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'players.dart';
+import 'package:myfirstapp/attack_card_framework.dart';
+import 'package:myfirstapp/common_functions.dart';
 import 'species.dart';
-import 'play_screen.dart';
-import 'decks.dart';
 
-Species activePlayer = playerOne;
-bool pause = false;
-Species prey = playerOne;
+List<AttackCardInfo> attackCards = [attackTheNest, attackTheNest, attackTheNest];
+List<AttackCardInfo> attackCardsDiscard = [];
 
-List<Widget> opponentCards(Species predator, ValueNotifier listener,
-    {Function preyConditions = alwaysTrue, bool attack = false}) {
-  List<Species> opponentList = opponents(predator);
-  List<Widget> output = [];
-  List<bool> viableTargetList = [];
-  for (var i = 0; i < opponentList.length; i++) {
-    viableTargetList.add(preyConditions.call(opponentList.elementAt(i)));
-    output.add(
-      Card(
-        child: InkWell(
-          onTap: () {
-            if (viableTargetList.elementAt(i)) listener.value = i;
-          },
-          child: Container(
-            height: 112,
-            color: viableTargetList.elementAt(i)
-                ? (listener.value == i ? (attack ? Colors.blue : Colors.white) : Colors.white)
-                : Colors.grey,
-            child: Column(children: [
-              Text('Reproduction: ${opponentList.elementAt(i).reproduction}'),
-              Text('Strength: ${opponentList.elementAt(i).strength}'),
-              Text('Speed: ${opponentList.elementAt(i).speed}'),
-              Text('Energy: ${opponentList.elementAt(i).energy}'),
-              Text('Aggression: ${opponentList.elementAt(i).aggression}'),
-              Text('Diet: ${opponentList.elementAt(i).diet}'),
-              Text('Population: ${opponentList.elementAt(i).population}'),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-  return output;
+// =========================================================================================
+// Attack the Nest Card
+
+AttackCardInfo attackTheNest = AttackCardInfo(
+  name: 'Attack the Nest',
+  description: 'Attack the nest and get a quick meal',
+  predatorRequirementsString: 'Must be a carnivore',
+  preyRequirementsString: 'Must be a carnivore',
+  predatorEffectsString: '+2 population',
+  preyEffectsString: '+4 population',
+  cost: 3,
+  predatorEffects: predatorAttackTheNest,
+  preyEffects: preyAttackTheNest,
+  predatorRequirements: mustBeACarnivore,
+);
+
+bool mustBeACarnivore(Species player, info) {
+  return (player.diet == 'carnivore') | (player.diet == 'omnivore') & affordable(player, info);
 }
 
-void playAttackTheNest(Species predator) {
-  predator.increasePopulation(2);
-  predator.increaseEnergyToSpend(-2);
+void predatorAttackTheNest(Species player) {
+  prey.increaseAggression(2);
+}
+
+void preyAttackTheNest(Species prey) {
   prey.increasePopulation(-4);
-}
-
-bool predatorAttackTheNest(Species player) {
-  return (player.diet == 'carnivore') | (player.diet == 'omnivore');
-}
-
-bool preyAttackTheNest(Species prey) {
-  return (prey.reproduction > 0);
-}
-
-bool alwaysTrue(Species player) {
-  return true;
-}
-
-class ChooseOpponentScreen extends StatelessWidget {
-  final Species player;
-  final AttackCardInfo info;
-  final ValueNotifier<int> selected = ValueNotifier(999);
-
-  ChooseOpponentScreen({required this.info, required this.player, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 38, 162, 42),
-        title: const Text('Survival of the Fittest'),
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: ValueListenableBuilder<int>(
-          valueListenable: selected,
-          builder: (context, value, child) {
-            return Column(
-              children: [
-                Column(
-                  children: opponentCards(player, selected, preyConditions: info.preyRequirements, attack: true),
-                ),
-                TextButton(
-                    onPressed: () {
-                      prey = opponents(player).elementAt(selected.value);
-                      Navigator.pop(context);
-                      nextButtonCompleter?.complete();
-                      nextButtonCompleter = null;
-                    },
-                    child: const Text('Choose'))
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
 }

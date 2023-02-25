@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'attack_cards.dart';
+import 'attack_card_framework.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'players.dart';
 import 'species.dart';
 import 'play_screen.dart';
-import 'decks.dart';
 
 class ViewOpponentScreen extends StatelessWidget {
   final Species player;

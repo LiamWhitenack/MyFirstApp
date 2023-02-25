@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:myfirstapp/card_classes.dart';
+import 'package:myfirstapp/adaptation_card_framework.dart';
 import 'ViewOpponentScreen.dart';
 import 'package:myfirstapp/players.dart';
-import 'species.dart';
+import 'adaptation_cards.dart';
 import 'attack_cards.dart';
-import 'mutation_screen.dart';
-// import 'players.dart';
-// import 'card_classes.dart';
-import 'decks.dart';
+import 'mutation_card_framework.dart';
+import 'species.dart';
+import 'attack_card_framework.dart';
+
+ValueNotifier<int> selected = ValueNotifier(999);
+ValueNotifier<String> selectedType = ValueNotifier('');
+ValueNotifier<bool> canPlay = ValueNotifier(false);
 
 void setupGame() {
   List<Species> playerList = [
@@ -177,26 +180,52 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 }
 
-class CardZoomed extends StatelessWidget {
-  final String imgPath;
-  const CardZoomed({required this.imgPath, super.key});
+// class CardZoomed extends StatelessWidget {
+//   final String imgPath;
+//   const CardZoomed({required this.imgPath, super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          title: const Center(
-            child: Text(
-              'Survival of the Fittest',
-              style: TextStyle(fontSize: 30),
-            ),
-          ),
-          backgroundColor: Colors.green,
-        ),
-      ),
-      body: Image.asset(imgPath),
-    );
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: PreferredSize(
+//         preferredSize: const Size.fromHeight(60.0),
+//         child: AppBar(
+//           title: const Center(
+//             child: Text(
+//               'Survival of the Fittest',
+//               style: TextStyle(fontSize: 30),
+//             ),
+//           ),
+//           backgroundColor: Colors.green,
+//         ),
+//       ),
+//       body: Image.asset(imgPath),
+//     );
+//   }
+// }
+
+List<Widget> evolutionCardWidgets(
+  evolutionCards,
+  ValueNotifier<int> selected,
+  ValueNotifier<bool> canPlay,
+) {
+  List<Widget> hand = [];
+  for (var i = 0; i < evolutionCards.length; i++) {
+    if (evolutionCards.elementAt(i) is AdaptationCardInfo) {
+      hand.add(AdaptationCard(
+          info: evolutionCards.elementAt(i),
+          selected: selected,
+          selectedType: selectedType,
+          canPlay: canPlay,
+          cardNum: i));
+    } else if (evolutionCards.elementAt(i) is AttackCardInfo) {
+      hand.add(AttackCard(
+          info: evolutionCards.elementAt(i),
+          selected: selected,
+          selectedType: selectedType,
+          canPlay: canPlay,
+          cardNum: i));
+    }
   }
+  return hand;
 }
