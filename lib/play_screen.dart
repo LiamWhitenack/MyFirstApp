@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myfirstapp/card_classes.dart';
 import 'ViewOpponentScreen.dart';
-import 'package:myfirstapp/loading.dart';
 import 'package:myfirstapp/players.dart';
 import 'species.dart';
 import 'attack_cards.dart';
@@ -82,13 +82,13 @@ class PlayScreen extends StatefulWidget {
 Completer<void>? nextButtonCompleter;
 
 class _PlayScreenState extends State<PlayScreen> {
-  Future<void> choosePrey(int cardNum) async {
+  Future<void> choosePrey(AttackCardInfo info) async {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChooseOpponentScreen(
-          cardNum: cardNum,
           player: playerOne,
+          info: info,
         ),
       ),
     );
@@ -104,6 +104,11 @@ class _PlayScreenState extends State<PlayScreen> {
     return ValueListenableBuilder<int>(
       valueListenable: selected,
       builder: (context, value, child) {
+        List handOfInfo = [...playerOne.adaptationCardHand, ...playerOne.attackCardHand];
+        List<Widget> handOfWidgets = evolutionCardWidgets(handOfInfo, selected, canPlay);
+        int numAdaptationCards = handOfInfo
+            .map((element) => element is AdaptationCardInfo ? 1 : 0)
+            .reduce((value, element) => value + element);
         return Column(children: [
           Text('Reproduction: ${playerOne.reproduction}'),
           Text('Strength: ${playerOne.strength}'),
@@ -116,7 +121,10 @@ class _PlayScreenState extends State<PlayScreen> {
             child: SizedBox(
               height: 300,
               child: ListView(
-                  shrinkWrap: true, scrollDirection: Axis.horizontal, children: cardNumsToCards(playerOne.hand)),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: handOfWidgets,
+              ),
             ),
           ),
           GestureDetector(
@@ -130,19 +138,31 @@ class _PlayScreenState extends State<PlayScreen> {
                           ),
                       onPressed: () async {
                         if ((selected.value == 999) | !canPlay.value) return;
-                        if (cardTypes[intToCardName[selected.value]] == 'attack') {
-                          if (!predatorConditions[intToCardName[selected.value]]?.call(playerOne)) return;
-                          await choosePrey(selected.value);
-                          if (!preyConditions[intToCardName[selected.value]]?.call(prey)) return;
+                        if ((handOfInfo.elementAt(selected.value) is AdaptationCardInfo)) {
+                          AdaptationCardInfo adaptationCardPlayed = handOfInfo.elementAt(selected.value);
+                          setState(
+                            () {
+                              adaptationCardPlayed.effects.call(playerOne);
+                              playerOne.adaptationCardHand.remove(adaptationCardPlayed);
+                              adaptationCardsDiscard.add(adaptationCardPlayed);
+                              selected.value = 999;
+                            },
+                          );
+                        } else if (handOfInfo.elementAt(selected.value) is AttackCardInfo) {
+                          AttackCardInfo attackCardPlayed = handOfInfo.elementAt(selected.value);
+                          if (!attackCardPlayed.predatorRequirements.call(playerOne, attackCardPlayed)) return;
+                          await choosePrey(attackCardPlayed);
+                          if (!attackCardPlayed.preyRequirements.call(prey)) return;
+                          setState(
+                            () {
+                              attackCardPlayed.predatorEffects.call(playerOne);
+                              attackCardPlayed.preyEffects.call(prey);
+                              playerOne.attackCardHand.remove(attackCardPlayed);
+                              attackCardsDiscard.add(attackCardPlayed);
+                              selected.value = 999;
+                            },
+                          );
                         }
-                        setState(
-                          () {
-                            cardFunctions[intToCardName[selected.value]]?.call(playerOne);
-                            playerOne.hand.remove(selected.value);
-                            discardNumList.add(selected.value);
-                            selected.value = 999;
-                          },
-                        );
                       },
                       child: const Text(
                         'Play',

@@ -1,3 +1,4 @@
+import 'package:myfirstapp/card_classes.dart';
 import 'package:myfirstapp/decks.dart';
 import 'package:myfirstapp/players.dart';
 
@@ -11,7 +12,8 @@ class Species {
   String diet;
   int population;
   int energyToSpend;
-  List<int> hand;
+  List<AdaptationCardInfo> adaptationCardHand;
+  List<AttackCardInfo> attackCardHand;
   List<Species> opponents;
 
   Species(
@@ -24,13 +26,14 @@ class Species {
     this.diet,
     this.population,
     this.energyToSpend,
-    this.hand,
+    this.adaptationCardHand,
+    this.attackCardHand,
     this.opponents,
   );
 
   void drawCards() {
-    hand.addAll(drawCardNums(reproduction));
-    hand.sort();
+    adaptationCardHand.addAll(drawAdaptationCards(reproduction));
+    attackCardHand.addAll(drawAttackCards(reproduction));
   }
 
   void increaseReproduction(int x) => reproduction = reproduction + x;

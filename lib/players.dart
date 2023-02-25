@@ -26,13 +26,14 @@ Species playerOne = Species(
   homoSapiens.elementAt(0),
   homoSapiens.elementAt(1),
   homoSapiens.elementAt(2),
-  homoSapiens.elementAt(3),
+  homoSapiens.elementAt(3) - 3,
   homoSapiens.elementAt(4),
   homoSapiens.elementAt(5),
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
-  homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  homoSapiens.elementAt(8) - 3,
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerTwo = Species(
@@ -45,7 +46,8 @@ Species playerTwo = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerThree = Species(
@@ -58,7 +60,8 @@ Species playerThree = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerFour = Species(
@@ -71,7 +74,8 @@ Species playerFour = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerFive = Species(
@@ -84,7 +88,8 @@ Species playerFive = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerSix = Species(
@@ -97,7 +102,8 @@ Species playerSix = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerSeven = Species(
@@ -110,7 +116,8 @@ Species playerSeven = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );
 Species playerEight = Species(
@@ -123,6 +130,7 @@ Species playerEight = Species(
   homoSapiens.elementAt(6),
   homoSapiens.elementAt(7),
   homoSapiens.elementAt(8),
-  drawCardNums(homoSapiens.elementAt(0)),
+  drawAdaptationCards(homoSapiens.elementAt(0)),
+  drawAttackCards(homoSapiens.elementAt(0) - 1),
   [],
 );

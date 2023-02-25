@@ -53,12 +53,16 @@ class MutationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       child: InkWell(
+        splashColor: Colors.greenAccent,
         onTap: () {
-          if (info.requirements.call(player, info.cost)) selected.value = cardNum;
+          if (info.requirements.call(player, info)) selected.value = cardNum;
         },
         child: Container(
-          color: info.requirements.call(player, info.cost)
+          color: info.requirements.call(player, info)
               ? selected.value == cardNum
                   ? Colors.blue
                   : Colors.green

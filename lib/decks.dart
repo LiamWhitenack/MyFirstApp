@@ -1,126 +1,94 @@
 import 'card_classes.dart';
 import 'package:flutter/material.dart';
-import 'attack_cards.dart';
 
 ValueNotifier<int> selected = ValueNotifier(999);
+ValueNotifier<String> selectedType = ValueNotifier('');
 ValueNotifier<bool> canPlay = ValueNotifier(false);
-List<int> cardNumList = returnCardNumList();
-List<int> discardNumList = [];
 
-Map<int, String> intToCardName = {
-  0: 'Long_Legs-01',
-  1: 'Long_Legs-02',
-  2: 'Long_Legs-03',
-  3: 'Sharp_Teeth-01',
-  4: 'Sharp_Teeth-02',
-  5: 'Sharp_Teeth-03',
-  6: 'Attack_the_Nest-01',
-};
+List<AdaptationCardInfo> adaptationCards = [longLegs, longLegs, longLegs, sharpTeeth, sharpTeeth, sharpTeeth];
+List<AdaptationCardInfo> adaptationCardsDiscard = [];
 
-Map<String, Widget> adaptationCards = {
-  'Long_Legs-01': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Long_Legs-01.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 0,
-  ),
-  'Long_Legs-02': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Long_Legs-02.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 1,
-  ),
-  'Long_Legs-03': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Long_Legs-03.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 2,
-  ),
-  'Sharp_Teeth-01': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Sharp_Teeth-01.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 3,
-  ),
-  'Sharp_Teeth-02': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Sharp_Teeth-02.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 4,
-  ),
-  'Sharp_Teeth-03': EvolutionCard(
-    imgPath: "images/Adaptation_Cards/Sharp_Teeth-03.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 5,
-  ),
-  'Attack_the_Nest-01': EvolutionCard(
-    imgPath: "images/Attack_Cards/Attack_the_Nest-01.png",
-    valueNotifier: selected,
-    canPlay: canPlay,
-    cardNum: 6,
-  ),
-};
+List<AttackCardInfo> attackCards = [attackTheNest, attackTheNest, attackTheNest];
+List<AttackCardInfo> attackCardsDiscard = [];
 
-Map<String, int> cardCosts = {
-  'Long_Legs-01': 1,
-  'Long_Legs-02': 1,
-  'Long_Legs-03': 1,
-  'Sharp_Teeth-01': 1,
-  'Sharp_Teeth-02': 1,
-  'Sharp_Teeth-03': 1,
-  'Attack_the_Nest-01': 2,
-};
+AdaptationCardInfo longLegs = AdaptationCardInfo(
+  effectsString: '+1 Speed, +1 Aggression',
+  name: 'Longer Legs',
+  description: 'Move faster',
+  requirementsString: '',
+  cost: 1,
+);
 
-Map<String, String> cardTypes = {
-  'Long_Legs-01': 'adaptation',
-  'Long_Legs-02': 'adaptation',
-  'Long_Legs-03': 'adaptation',
-  'Sharp_Teeth-01': 'adaptation',
-  'Sharp_Teeth-02': 'adaptation',
-  'Sharp_Teeth-03': 'adaptation',
-  'Attack_the_Nest-01': 'attack',
-};
+AdaptationCardInfo sharpTeeth = AdaptationCardInfo(
+  effectsString: '+1 Strength, +1 Aggression',
+  name: 'Sharp Teeth',
+  description: 'Fight better',
+  requirementsString: '',
+  cost: 1,
+);
 
-Map<String, Function> cardFunctions = {
-  'Long_Legs-01': playLongLegs,
-  'Long_Legs-02': playLongLegs,
-  'Long_Legs-03': playLongLegs,
-  'Sharp_Teeth-01': playSharpTeeth,
-  'Sharp_Teeth-02': playSharpTeeth,
-  'Sharp_Teeth-03': playSharpTeeth,
-  'Attack_the_Nest-01': playAttackTheNest,
-};
-
-List<Widget> cardNumsToCards(List<int> cards) {
+List<Widget> evolutionCardWidgets(
+  evolutionCards,
+  ValueNotifier<int> selected,
+  ValueNotifier<bool> canPlay,
+) {
   List<Widget> hand = [];
-  for (var cardNum in cards) {
-    hand.add(adaptationCards[intToCardName[cardNum]]!);
+  for (var i = 0; i < evolutionCards.length; i++) {
+    if (evolutionCards.elementAt(i) is AdaptationCardInfo) {
+      hand.add(AdaptationCard(
+          info: evolutionCards.elementAt(i),
+          selected: selected,
+          selectedType: selectedType,
+          canPlay: canPlay,
+          cardNum: i));
+    } else if (evolutionCards.elementAt(i) is AttackCardInfo) {
+      hand.add(AttackCard(
+          info: evolutionCards.elementAt(i),
+          selected: selected,
+          selectedType: selectedType,
+          canPlay: canPlay,
+          cardNum: i));
+    }
   }
   return hand;
 }
 
-List<int> returnCardNumList() {
-  List<int> res = [];
-  for (var i = 0; i < intToCardName.length; i++) {
-    res.add(i);
+List<Widget> attackCardWidgets(
+    List<AttackCardInfo> attackCards, ValueNotifier<int> selected, ValueNotifier<bool> canPlay) {
+  List<Widget> hand = [];
+  for (var i = 0; i < attackCards.length; i++) {
+    hand.add(AttackCard(
+        info: attackCards.elementAt(i), selected: selected, selectedType: selectedType, canPlay: canPlay, cardNum: i));
   }
-  res.shuffle();
-  return res;
+  return hand;
 }
 
-List<int> drawCardNums(int numCards) {
-  if (cardNumList.length < numCards) {
-    discardNumList.shuffle();
-    cardNumList.addAll(discardNumList);
-    discardNumList = [];
+List<AdaptationCardInfo> drawAdaptationCards(int numCards) {
+  adaptationCards.shuffle();
+  if (adaptationCards.length < numCards) {
+    adaptationCardsDiscard.shuffle();
+    adaptationCards.addAll(adaptationCardsDiscard);
+    adaptationCardsDiscard = [];
   }
-  List<int> drawn = [];
+  List<AdaptationCardInfo> drawn = [];
   for (var i = 0; i < numCards; i++) {
-    drawn.add(cardNumList.first);
-    cardNumList.remove(cardNumList.first);
+    drawn.add(adaptationCards.first);
+    adaptationCards.remove(adaptationCards.first);
   }
-  drawn.add(6);
-  drawn.sort();
+  return drawn;
+}
+
+List<AttackCardInfo> drawAttackCards(int numCards) {
+  attackCards.shuffle();
+  if (attackCards.length < numCards) {
+    attackCardsDiscard.shuffle();
+    attackCards.addAll(attackCardsDiscard);
+    attackCardsDiscard = [];
+  }
+  List<AttackCardInfo> drawn = [];
+  for (var i = 0; i < numCards; i++) {
+    drawn.add(attackCards.first);
+    attackCards.remove(attackCards.first);
+  }
   return drawn;
 }

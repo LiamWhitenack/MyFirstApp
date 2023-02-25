@@ -3,9 +3,9 @@ import 'package:myfirstapp/players.dart';
 
 import 'species.dart';
 
-List<MutationCardInfo> mutationCards = [multipleStomachsClass, multipleStomachsClass];
+List<MutationCardInfo> mutationCards = [multipleStomachs, multipleStomachs];
 
-MutationCardInfo multipleStomachsClass = MutationCardInfo(
+MutationCardInfo multipleStomachs = MutationCardInfo(
     name: 'Multiple Stomachs',
     description: 'Now that you can safely consume practically anything, you will never go hungry',
     requirementsString: 'Strength > 4, Terrain must be plains',
@@ -44,6 +44,6 @@ void doNothing(Species player) {
   return;
 }
 
-bool affordable(Species player, int cost) {
-  return player.energyToSpend >= cost;
+bool affordable(Species player, info) {
+  return player.energyToSpend >= info.cost;
 }
