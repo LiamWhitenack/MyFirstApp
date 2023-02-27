@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:myfirstapp/common_functions.dart';
+
 import 'adaptation_card_framework.dart';
 import 'species.dart';
 
@@ -15,6 +17,8 @@ AdaptationCardInfo longLegs = AdaptationCardInfo(
   description: 'Move faster',
   requirementsString: '',
   cost: 1,
+  requirements: affordable,
+  effects: playSharpTeeth,
 );
 
 void playLongLegs(Species player) {
@@ -32,6 +36,8 @@ AdaptationCardInfo sharpTeeth = AdaptationCardInfo(
   description: 'Fight better',
   requirementsString: '',
   cost: 1,
+  requirements: affordable,
+  effects: playSharpTeeth,
 );
 
 void playSharpTeeth(Species player) {

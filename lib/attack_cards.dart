@@ -22,11 +22,12 @@ AttackCardInfo attackTheNest = AttackCardInfo(
 );
 
 bool mustBeACarnivore(Species player, info) {
-  return (player.diet == 'carnivore') | (player.diet == 'omnivore') & affordable(player, info);
+  return (player.diet == 'carnivore') & (player.diet == 'omnivore') & affordable(player, info);
 }
 
 void predatorAttackTheNest(Species player) {
-  prey.increaseAggression(2);
+  player.increaseEnergyToSpend(-2);
+  player.increaseAggression(2);
 }
 
 void preyAttackTheNest(Species prey) {

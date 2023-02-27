@@ -31,7 +31,7 @@ class AttackCardInfo {
     this.predatorEffects = doNothing,
     this.preyEffects = doNothing,
     this.predatorRequirements = affordable,
-    this.preyRequirements = preyAttackTheNest,
+    this.preyRequirements = alwaysTrue,
     this.predatorRequirementsString = '',
     this.preyRequirementsString = '',
   });
@@ -138,13 +138,15 @@ class AttackCard extends StatelessWidget {
           child: Card(
             clipBehavior: Clip.antiAlias,
             color: (cardNum == selected.value) & (selectedType.value == 'attack')
-                ? (info.predatorRequirements.call(playerOne, info) ? Colors.red : Colors.pink)
+                ? (info.predatorRequirements.call(playerOne, info)
+                    ? Colors.red
+                    : const Color.fromARGB(255, 255, 200, 200))
                 : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
             child: InkWell(
-              splashColor: Colors.redAccent,
+              splashColor: const Color.fromARGB(255, 255, 200, 200),
               onTap: () {
                 selectedType.value = 'attack';
                 selected.value = cardNum;

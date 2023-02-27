@@ -108,73 +108,85 @@ class _PlayScreenState extends State<PlayScreen> {
       valueListenable: selected,
       builder: (context, value, child) {
         List handOfInfo = [...playerOne.adaptationCardHand, ...playerOne.attackCardHand];
+        Color textButtonColor;
+        if (selected.value != 999) {
+          bool adaptationCard = handOfInfo.elementAt(selected.value) is AdaptationCardInfo;
+          if (adaptationCard) {
+            textButtonColor = (selected.value != 999) & canPlay.value ? Colors.green : Colors.lightGreen;
+          } else {
+            textButtonColor =
+                (selected.value != 999) & canPlay.value ? Colors.red : const Color.fromARGB(255, 255, 200, 200);
+          }
+        } else {
+          textButtonColor = Colors.white;
+        }
         List<Widget> handOfWidgets = evolutionCardWidgets(handOfInfo, selected, canPlay);
-        int numAdaptationCards = handOfInfo
-            .map((element) => element is AdaptationCardInfo ? 1 : 0)
-            .reduce((value, element) => value + element);
-        return Column(children: [
-          Text('Reproduction: ${playerOne.reproduction}'),
-          Text('Strength: ${playerOne.strength}'),
-          Text('Speed: ${playerOne.speed}'),
-          Text('Energy: ${playerOne.energy}'),
-          Text('Aggression: ${playerOne.aggression}'),
-          Text('Diet: ${playerOne.diet}'),
-          Text('Population: ${playerOne.population}'),
-          Center(
-            child: SizedBox(
-              height: 300,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: handOfWidgets,
+        return Column(
+          children: [
+            Text('Reproduction: ${playerOne.reproduction}'),
+            Text('Strength: ${playerOne.strength}'),
+            Text('Speed: ${playerOne.speed}'),
+            Text('Energy: ${playerOne.energy}'),
+            Text('Aggression: ${playerOne.aggression}'),
+            Text('Diet: ${playerOne.diet}'),
+            Text('Population: ${playerOne.population}'),
+            Center(
+              child: SizedBox(
+                height: 300,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: handOfWidgets,
+                ),
               ),
             ),
-          ),
-          GestureDetector(
-            child: ValueListenableBuilder<bool>(
-                valueListenable: canPlay,
-                builder: (context, value, child) {
-                  return TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: (selected.value != 999) & canPlay.value ? Colors.green : Colors.lightGreen,
-                          foregroundColor: Colors.white // Text Color
-                          ),
-                      onPressed: () async {
-                        if ((selected.value == 999) | !canPlay.value) return;
-                        if ((handOfInfo.elementAt(selected.value) is AdaptationCardInfo)) {
-                          AdaptationCardInfo adaptationCardPlayed = handOfInfo.elementAt(selected.value);
-                          setState(
-                            () {
-                              adaptationCardPlayed.effects.call(playerOne);
-                              playerOne.adaptationCardHand.remove(adaptationCardPlayed);
-                              adaptationCardsDiscard.add(adaptationCardPlayed);
-                              selected.value = 999;
-                            },
-                          );
-                        } else if (handOfInfo.elementAt(selected.value) is AttackCardInfo) {
-                          AttackCardInfo attackCardPlayed = handOfInfo.elementAt(selected.value);
-                          if (!attackCardPlayed.predatorRequirements.call(playerOne, attackCardPlayed)) return;
-                          await choosePrey(attackCardPlayed);
-                          if (!attackCardPlayed.preyRequirements.call(prey)) return;
-                          setState(
-                            () {
-                              attackCardPlayed.predatorEffects.call(playerOne);
-                              attackCardPlayed.preyEffects.call(prey);
-                              playerOne.attackCardHand.remove(attackCardPlayed);
-                              attackCardsDiscard.add(attackCardPlayed);
-                              selected.value = 999;
-                            },
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'Play',
-                        style: TextStyle(fontSize: 25),
-                      ));
-                }),
-          ),
-          Center(child: Text("Energy Remaining: ${playerOne.energyToSpend}")),
-        ]);
+            ValueListenableBuilder<bool>(
+              valueListenable: canPlay,
+              builder: (context, value, child) {
+                return GestureDetector(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: textButtonColor, foregroundColor: Colors.white, // Text Color
+                    ),
+                    onPressed: () async {
+                      if ((selected.value == 999) | !canPlay.value) return;
+                      if ((handOfInfo.elementAt(selected.value) is AdaptationCardInfo)) {
+                        AdaptationCardInfo adaptationCardPlayed = handOfInfo.elementAt(selected.value);
+                        setState(
+                          () {
+                            adaptationCardPlayed.effects.call(playerOne);
+                            playerOne.adaptationCardHand.remove(adaptationCardPlayed);
+                            adaptationCardsDiscard.add(adaptationCardPlayed);
+                            selected.value = 999;
+                          },
+                        );
+                      } else if (handOfInfo.elementAt(selected.value) is AttackCardInfo) {
+                        AttackCardInfo attackCardPlayed = handOfInfo.elementAt(selected.value);
+                        if (!attackCardPlayed.predatorRequirements.call(playerOne, attackCardPlayed)) return;
+                        await choosePrey(attackCardPlayed);
+                        if (!attackCardPlayed.preyRequirements.call(prey)) return;
+                        setState(
+                          () {
+                            attackCardPlayed.predatorEffects.call(playerOne);
+                            attackCardPlayed.preyEffects.call(prey);
+                            playerOne.attackCardHand.remove(attackCardPlayed);
+                            attackCardsDiscard.add(attackCardPlayed);
+                            selected.value = 999;
+                          },
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'Play',
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Center(child: Text("Energy Remaining: ${playerOne.energyToSpend}")),
+          ],
+        );
       },
     );
   }

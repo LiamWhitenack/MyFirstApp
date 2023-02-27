@@ -1,30 +1,44 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:myfirstapp/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  runApp(
+    const MaterialApp(
+      home: MyWidget(),
+    ),
+  );
+}
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: nineCards(),
+    );
+  }
+}
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+List<Widget> nineCards() {
+  List<int> numList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  List<Widget> output = [];
+  int value = 42;
+  int i = 0;
+  for (int ele in numList) {
+    output.add(
+      Card(
+        child: InkWell(
+          onTap: () {
+            value = i;
+          },
+          child: Container(
+            color: value == i ? Colors.blue : Colors.grey,
+            child: Text('element: $ele'),
+          ),
+        ),
+      ),
+    );
+    i++;
+  }
+  return output;
 }
